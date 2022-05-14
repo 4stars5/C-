@@ -1,0 +1,91 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+struct Item
+{
+	char country[100];
+	int jpsl;//金牌数量
+	int ypsl;//银牌数量 
+	int tpsl;//铜牌数量
+	int sum;//总数量 
+};
+void printItem(struct Item a)
+{
+	printf("%s\t%d\t%d\t%d\t%d\n",a.country,a.jpsl,a.ypsl,a.tpsl,a.sum);
+}
+
+void fillItem(struct Item* a,char str[])
+{
+	char country[100]={'\0'};
+	int countryxb=0;//国家下标
+	int sxb=0;
+	while(str[sxb]!='\t')   country[countryxb++]=str[sxb++]; 
+	strcpy(a->country,country);
+	
+	sxb++;
+	char jpsl[100]={'\0'};
+	int jpxb=0;
+	while(str[sxb]!='\t')	jpsl[jpxb++]=str[sxb++];
+	a->jpsl=atoi(jpsl);
+	
+	sxb++;
+	char ypsl[100]={'\0'};
+	int ypxb=0;
+	while(str[sxb]!='\t')	ypsl[ypxb++]=str[sxb++];
+	a->ypsl=atoi(ypsl);
+	
+	sxb++;
+	char tpsl[100]={'\0'};
+	int tpxb=0;
+	while(str[sxb]!='\t')	tpsl[tpxb++]=str[sxb++];
+	a->tpsl=atoi(tpsl);
+	
+	sxb++;
+	char sum[100]={'\0'};
+	int sumxb=0;
+	while(str[sxb]!='\n')	sum[sumxb++]=str[sxb++];
+	a->sum=atoi(sum);
+ } 
+ 
+int main()
+{
+	FILE* infp=fopen("D:\\HHH.txt","r");
+	if(infp==NULL)
+	{
+		printf("error\n");
+		return 0;
+	}
+	
+	char str[7][100];
+	int isFirstLine=1,i=0;
+	while(fgets(str[i],100,infp)!=NULL)
+	{
+		if(isFirstLine==1)	isFirstLine=0;
+		else i++;
+	}
+	fclose(infp);
+	
+	struct Item as[7];
+	for(int i=0;i<7;i++)
+	{
+		fillItem(&as[i],str[i]);
+		printItem(as[i]);
+	}
+	system("pause");
+	
+	struct Item max=as[0];
+	for(int i=1;i<7;i++)
+	{
+		if(as[i].sum>max.sum)	max=as[i];
+	}
+	printItem(max);
+	
+	struct Item min=as[0];
+	for(int i=1;i<7;i++)
+	{
+		if(as[i].sum<min.sum)   min=as[i];
+	}
+	printItem(min);
+	
+	return 0;
+}
